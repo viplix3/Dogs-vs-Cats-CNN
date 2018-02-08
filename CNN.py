@@ -39,7 +39,7 @@ def create_training_data():
         training_data.append([np.array(img_data), create_label(img)])
     shuffle(training_data)
     np.save('training_data.npy', training_data)
-    return training_data
+    return training_data 
 
 
 def create_testing_data():
