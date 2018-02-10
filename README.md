@@ -1,6 +1,6 @@
 # Dogs vs Cats CNN
 
-A convolutional neural network which classifies the input images of cats and dogs
+A convolutional neural network implemented using tflearn which classifies the input images of cats and dogs
 
 You can use your own dataset or can use my pre-processed data set
 
