@@ -39,7 +39,7 @@ def create_training_data():
         training_data.append([np.array(img_data), create_label(img)])
     shuffle(training_data)
     np.save('training_data.npy', training_data)
-    return training_data 
+    return training_data
 
 
 def create_testing_data():
@@ -49,7 +49,7 @@ def create_testing_data():
         img_num = img.split('.')[0]
         img_data = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         img_data = cv2.resize(img_data, (image_size, image_size))
-        testing_data.append([np.array(img_data), img_num])
+        testing_data.append([np.array(img_data), create_label(img)])
     shuffle(testing_data)
     np.save('testing_data.npy', testing_data)
     return testing_data
@@ -63,7 +63,7 @@ test_data = create_testing_data()
 # train_data = np.load('training_data.npy')
 # test_data = np.load('testing_data.npy')
 
-train = train_data[:-500]
+train = train_data[::]
 test = test_data[::]
 X_train = np.array([i[0] for i in train]).reshape(-1, image_size, image_size, 1)
 y_train = [i[1] for i in train]
@@ -71,17 +71,15 @@ X_test = np.array([i[0] for i in test]).reshape(-1, image_size, image_size, 1)
 y_test = [i[1] for i in test]
 
 # Actually building the model
-tf.reset_default_graph()
+# tf.reset_default_graph()
 convnet = input_data(shape = [None, image_size, image_size, 1], name = 'input')
-convnet = conv_2d(convnet, 32, 3, activation='relu')
-convnet = max_pool_2d(convnet, 2)
 convnet = conv_2d(convnet, 32, 5, activation='relu')
+convnet = max_pool_2d(convnet, 5)
 convnet = conv_2d(convnet, 64, 5, activation='relu')
 convnet = max_pool_2d(convnet, 5)
 convnet = conv_2d(convnet, 128, 5, activation='relu')
 convnet = max_pool_2d(convnet, 5)
 convnet = conv_2d(convnet, 64, 5, activation='relu')
-convnet = conv_2d(convnet, 32, 5, activation='relu')
 convnet = max_pool_2d(convnet, 5)
 convnet = conv_2d(convnet, 32, 3, activation='relu')
 convnet = max_pool_2d(convnet, 5)
@@ -89,15 +87,14 @@ convnet = fully_connected(convnet, 1024, activation='relu')
 convnet = dropout(convnet, 0.8)
 convnet = fully_connected(convnet, 100, activation='relu')
 convnet = fully_connected(convnet, 2, activation='softmax')
+#acc = Accuracy(name="Accuracy")
 convnet = regression(convnet, optimizer='adam', learning_rate=lr, loss='categorical_crossentropy')
-
 # Just some stuff that has to be done for tensorboard
-model = tflearn.DNN(convnet, tensorboard_dir='log', tensorboard_verbose=0)
+model = tflearn.DNN(convnet, tensorboard_dir='log', tensorboard_verbose=0, checkpoint_path='log/model_cat_dog_6.tflearn', max_checkpoints = 3)
 
 
 # This is the code that fits the data into the model
-model.fit(X_train, y_train, n_epoch=10, validation_set=(X_test, y_test), snapshot_step=500, show_metric=True, run_id=Model_Name)
-
+model.fit(X_train, y_train, n_epoch=150, validation_set=(X_test, y_test), show_metric=True, run_id='model_cat_dog_6')
 fig = plt.figure(figsize=(16,12))
 
 for num, data in enumerate(test_data[:16]):
@@ -119,3 +116,5 @@ for num, data in enumerate(test_data[:16]):
     y.axes.get_xaxis().set_visible(False)
     y.axes.get_yaxis().set_visible(False)
 plt.show()
+
+model.save('trained_model.tflearn')
