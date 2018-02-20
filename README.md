@@ -4,4 +4,10 @@ A convolutional neural network implemented using tflearn which classifies the in
 
 You can use your own dataset or can use my pre-processed data set
 
-Pre-processed dataset - https://drive.google.com/open?id=11a9zMdcSGf2JNfoSv8QKH_8FCmCP86Dt
+Pre-processed training dataset -https://storage.googleapis.com/general-items/cats-vs-dogs-CNN/training_data_COLOR.npy
+
+Pre-processed tvalidaion dataset -https://storage.googleapis.com/general-items/cats-vs-dogs-CNN/validation_data_COLOR.npy
+
+Pre-processed testing dataset - https://storage.googleapis.com/general-items/cats-vs-dogs-CNN/testing_data_COLOR.npy
+
+The attached model has ~81.7% accuracy on test data
