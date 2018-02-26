@@ -10,4 +10,4 @@ Pre-processed validaion dataset -https://storage.googleapis.com/general-items/ca
 
 Pre-processed testing dataset - https://storage.googleapis.com/general-items/cats-vs-dogs-CNN/testing_data_COLOR.npy
 
-The attached model has ~81.7% accuracy on test data
+The attached model has ~85.7% accuracy on test data
